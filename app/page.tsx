@@ -1,65 +1,157 @@
-import Image from "next/image";
+"use client";
+
+import { useState, ReactNode } from "react";
+import { motion } from "framer-motion";
+import { Phone, Menu, X, Car, Key, Building2, ShieldCheck } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      <Navbar />
+      <Hero />
+      <Services />
+      <About />
+      <Contact />
+      <Footer />
+    </>
+  );
+}
+
+function Navbar() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="fixed w-full bg-white shadow z-50">
+      <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
+        <h1 className="font-bold text-xl">QuickKey Locksmith</h1>
+        <nav className="hidden md:flex gap-6">
+          <a href="#services">Services</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <a
+          href="tel:+1234567890"
+          className="hidden md:flex items-center gap-2 bg-yellow-400 px-4 py-2 rounded-xl font-semibold"
+        >
+          <Phone size={18} /> Call Now
+        </a>
+        <button
+          className="md:hidden"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X /> : <Menu />}
+        </button>
+      </div>
+      {open && (
+        <div className="md:hidden bg-white p-4 space-y-4">
+          <a href="#services">Services</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </div>
+      )}
+    </header>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="pt-32 pb-24 bg-gradient-to-br from-gray-900 to-gray-800 text-white text-center px-6">
+      <motion.h2
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-5xl font-bold mb-6"
+      >
+        24/7 Emergency Locksmith Services
+      </motion.h2>
+      <p className="mb-8 text-lg">
+        Fast response. Upfront pricing. Professional service.
+      </p>
+      <a
+        href="tel:+1234567890"
+        className="inline-flex items-center gap-2 bg-yellow-400 text-black px-8 py-4 rounded-2xl font-bold"
+      >
+        <Phone /> Call (123) 456-7890
+      </a>
+    </section>
+  );
+}
+
+function Services() {
+  return (
+    <section id="services" className="py-24 px-6 max-w-6xl mx-auto">
+      <h3 className="text-3xl font-bold text-center mb-16">Our Services</h3>
+      <div className="grid md:grid-cols-3 gap-10">
+        <Card
+          icon={<Car size={32} />}
+          title="Automotive"
+          text="Car lockouts, ignition repair, key programming."
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        <Card
+          icon={<Key size={32} />}
+          title="Residential"
+          text="Rekeying, lock repair, smart locks."
+        />
+        <Card
+          icon={<Building2 size={32} />}
+          title="Commercial"
+          text="Master key systems, high-security locks."
+        />
+      </div>
+    </section>
+  );
+}
+
+interface CardProps {
+  icon: ReactNode;
+  title: string;
+  text: string;
+}
+
+function Card({ icon, title, text }: CardProps) {
+  return (
+    <div className="bg-gray-100 p-8 rounded-2xl shadow text-center">
+      <div className="mb-4 text-yellow-500">{icon}</div>
+      <h4 className="font-bold text-xl mb-3">{title}</h4>
+      <p>{text}</p>
     </div>
+  );
+}
+
+function About() {
+  return (
+    <section id="about" className="bg-gray-100 py-24 px-6 text-center">
+      <ShieldCheck size={48} className="mx-auto mb-6 text-yellow-500" />
+      <h3 className="text-3xl font-bold mb-6">Licensed & Insured</h3>
+      <p className="max-w-3xl mx-auto">
+        Trusted locksmith professionals serving your area 24/7.
+      </p>
+    </section>
+  );
+}
+
+function Contact() {
+  return (
+    <section
+      id="contact"
+      className="py-24 px-6 text-center bg-gray-900 text-white"
+    >
+      <h3 className="text-3xl font-bold mb-6">Need Immediate Help?</h3>
+      <p className="mb-8">Call now for fast assistance.</p>
+      <a
+        href="tel:+1234567890"
+        className="bg-yellow-400 text-black px-8 py-4 rounded-2xl font-bold"
+      >
+        Call Now
+      </a>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="bg-black text-white text-center py-6">
+      © 2026 QuickKey Locksmith. All rights reserved.
+    </footer>
   );
 }
